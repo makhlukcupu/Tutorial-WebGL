@@ -99,11 +99,11 @@ function main() {
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 
     // Tell the color attribute how to get data out of colorBuffer (ARRAY_BUFFER)
-    var size = 4;          // 4 components per iteration
-    var type = gl.FLOAT;   // the data is 32bit floats
-    var normalize = false; // don't normalize the data
-    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    var offset = 0;        // start at the beginning of the buffer
+    var size = 4;                 // 4 components per iteration
+    var type = gl.UNSIGNED_BYTE;  // the data is 8bit unsigned bytes
+    var normalize = true;         // normalize the data
+    var stride = 0;               // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;               // start at the beginning of the buffer
     gl.vertexAttribPointer(
         colorLocation, size, type, normalize, stride, offset);
 
@@ -146,16 +146,23 @@ function setGeometry(gl) {
 // Note, will put the values in whatever buffer is currently
 // bound to the ARRAY_BUFFER bind point
 function setColors(gl) {
-  // Make every vertex a different color.
+  // Pick 2 random colors.
+  var r1 = Math.random() * 256; // 0 to 255.99999
+  var b1 = Math.random() * 256; // these values
+  var g1 = Math.random() * 256; // will be truncated
+  var r2 = Math.random() * 256; // when stored in the
+  var b2 = Math.random() * 256; // Uint8Array
+  var g2 = Math.random() * 256;
+
   gl.bufferData(
       gl.ARRAY_BUFFER,
-      new Float32Array(
-        [ Math.random(), Math.random(), Math.random(), 1,
-          Math.random(), Math.random(), Math.random(), 1,
-          Math.random(), Math.random(), Math.random(), 1,
-          Math.random(), Math.random(), Math.random(), 1,
-          Math.random(), Math.random(), Math.random(), 1,
-          Math.random(), Math.random(), Math.random(), 1]),
+      new Uint8Array(   // Uint8Array
+        [ r1, b1, g1, 255,
+          r1, b1, g1, 255,
+          r1, b1, g1, 255,
+          r2, b2, g2, 255,
+          r2, b2, g2, 255,
+          r2, b2, g2, 255]),
       gl.STATIC_DRAW);
 }
 
